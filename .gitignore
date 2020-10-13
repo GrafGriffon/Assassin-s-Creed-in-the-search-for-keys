@@ -1,0 +1,40 @@
+# Необходимые условия
+*.d
+
+# Собранные файлы объектов
+*.slo
+*.lo
+*.o
+*.obj
+
+# Предварительно завершенные головки
+*.gch
+*.pch
+
+# Составные динамические библиотеки
+*.so
+*.dylib
+*.dll
+
+# Файлы модулей Fortran
+*.mod
+*.smod
+
+# Составные статические библиотеки
+*.lai
+*.la
+*.a
+*.lib
+
+# Исполняемые файлы
+*.exe
+*.out
+*.app
+
+.vs/*
+x64/*
+Debug/*
+Release/*
+ProjectKursach/x64/*
+ProjectKursach/Debug/*
+ProjectKursach/Release/*
