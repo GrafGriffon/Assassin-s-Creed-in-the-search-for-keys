@@ -7,6 +7,8 @@
 #include <math.h>
 #include <map>
 #include "main.h"
+#include <windows.h>
+#include <string.h>
 
 using namespace sf;
 
@@ -68,7 +70,7 @@ public:
 		if (currentFrame > 5) currentFrame -= 5; // обнуление времени
 		if (currentFrame > 2) {positionHero(currentFrame, 44);}
 		else { positionHero(currentFrame, 41); }
-		if ((!Keyboard::isKeyPressed(Keyboard::Right)) && (!Keyboard::isKeyPressed(Keyboard::Left)) && (!Keyboard::isKeyPressed(Keyboard::Up)))
+		if ((!Keyboard::isKeyPressed(Keyboard::Right)) && (!Keyboard::isKeyPressed(Keyboard::Left)) && (!Keyboard::isKeyPressed(Keyboard::Up)))    //стойка персонажа
 		{
 			if (isCheckRight) {sprite.setTextureRect(IntRect(39 * int(currentFrame), 1, 32, 60));}
 			else {sprite.setTextureRect(IntRect(39 * int(currentFrame) + 32, 1, -32, 60));}
@@ -82,13 +84,13 @@ public:
 	}
 
 	void positionHero(float currentFrame, int pixel) {
-		if (dx > 0) sprite.setTextureRect(IntRect(pixel * int(currentFrame), 74, pixel, 60));//изменение текстуры000
+		if (dx > 0) sprite.setTextureRect(IntRect(pixel * int(currentFrame), 74, pixel, 60));//изменение текстуры
 		if (dx < 0) sprite.setTextureRect(IntRect(pixel * int(currentFrame) + pixel, 74, -pixel, 60));
 	}
 
 	void jump(int i) {
 		int x = rect.left / 32;    int y = (rect.top / 32) + 2;
-		if ((TileMap[y][x + i] != 'B') && (TileMap[y][x + i] != 'b'))
+		if ((TileMap[y][x + i] != 'B') && (TileMap[y][x + i] != 'b')&& (TileMap[y-1][x + i] != 'B') && (TileMap[y-1][x + i] != 'b')&& (TileMap[y-2][x + i] != 'B') && (TileMap[y-2][x + i] != 'b'))
 		{
 			if (isCheckRight) {sprite.setTextureRect(IntRect(335, 273, 32, 60));}
 			else {sprite.setTextureRect(IntRect(367, 273, -32, 60));}
@@ -151,7 +153,7 @@ public:
 };
 
 void printInfo(RenderWindow& window) {
-	font.loadFromFile("3.ttf");
+	font.loadFromFile("Fonts\\3.ttf");
 	Text text("", font, 30);
 	text.setStyle(Text::Bold);
 	Text textHp("", font, 35);
@@ -215,7 +217,7 @@ RenderWindow window(VideoMode(800, 500), "Assassin's Creed: in the search for ke
 
 void viewInfo(Sprite sprite) {
 	Font font;
-	font.loadFromFile("2.ttf");
+	font.loadFromFile("Fonts\\2.ttf");
 	Text text("\n  Целью данного игрового средства является сбор всех \nключей на игровом поле. Управление осущенствляется \nпо сдедствам стрелок. Игровой процесс продолжается,\nпока не кончатся очки hp, или не будет выполнена цель.\nЭто ПО разработано судентом группы 951006 БГУИР  \nКурбацкий Ильёй Дмитриевичем в 2020 году.\n\n\n\n\n                    - ссылка для обратной связи", font, 30);
 	text.setStyle(Text::Bold);
 	text.setPosition(20, 90);
@@ -235,7 +237,7 @@ void eventWindow() {
 }
 
 void printResult() {
-	font.loadFromFile("3.ttf");
+	font.loadFromFile("Fonts\\3.ttf");
 	Text text("", font, 80);
 	text.setStyle(Text::Bold);
 	std::ostringstream scorePlayer;
@@ -266,7 +268,7 @@ void returnKeys() {
 }
 
 int printPrewiev(Sprite sprite, int menu, bool checkMusic) {
-	window.clear(Color::Red);
+	window.clear(Color::Black);
 	window.draw(sprite);
 	window.display();
 	if (!checkMusic)
@@ -307,14 +309,13 @@ void printMenu(RectangleShape& choice, Sprite sprite1, Sprite sprite2, Clock& ti
 	case 2: {choice.setPosition(450, 208); break;}
 	case 3: {choice.setPosition(450, 272); break;}
 	}
-	window.setKeyRepeatEnabled(false);
 }
 	
 void gamrplay(Sprite sprite1, Sprite sprite2, Texture t) {
 	PLAYER p(t);
 	Clock clock;
 	SoundBuffer buffer;
-	buffer.loadFromFile("jump.wav");// тут загружаем в буфер что то
+	buffer.loadFromFile("Audio\\jump.wav");// тут загружаем в буфер что то
 	Sound sound;
 	sound.setBuffer(buffer);
 	int noKey = 0, keys = 5;
@@ -343,7 +344,7 @@ void gamrplay(Sprite sprite1, Sprite sprite2, Texture t) {
 		if (p.rect.left > 400) offsetX = p.rect.left - 400;
 		if (p.rect.left > 32 * W - 400) offsetX = p.rect.left - 400 - (p.rect.left - 32 * W + 400);
 		offsetY = p.rect.top - 250;
-		window.clear(Color::Blue);
+		window.clear(Color::Black);
 		window.draw(sprite1);
 		printMap(window, sprite2, rectangle, noKey, keys);
 		printInfo(window);
@@ -353,55 +354,131 @@ void gamrplay(Sprite sprite1, Sprite sprite2, Texture t) {
 	}
 }
 
-void readMap() {
+void readMap(const char name[]) {
 	using namespace std;
 	int num = 0;
 	string s;
-	ifstream file("Map.txt");
-	while (getline(file, s)) {
+	ifstream file1(name);
+	while (getline(file1, s)) {
 		TileMap[num] = s;
 		num++;
 	}
-	file.close();
+	file1.close();
+}
+
+void setSprite(Sprite& sprite0, Sprite& sprite1, Sprite& sprite2, Sprite& sprite3, Sprite& sprite4, Sprite& sprite5, Sprite& sprite6, Texture& tx, Texture& pr) {
+	tx.loadFromFile("Graphics\\work.png");
+	pr.loadFromFile("Graphics\\2.png");
+	sprite0.setTexture(tx);
+	sprite0.setTextureRect(IntRect(1, 430, 800, 500));
+	sprite0.setPosition(-offsetX, -offsetY);
+	sprite1.setTexture(tx);
+	sprite1.setTextureRect(IntRect(0, 0, 32, 32));
+	sprite2.setTexture(tx);
+	sprite2.setTextureRect(IntRect(590, 0, 280, 430));
+	sprite2.setPosition(50, 40);
+	sprite3.setTexture(tx);
+	sprite3.setTextureRect(IntRect(0, 72, 240, 185));
+	sprite3.setPosition(450, 150);
+	sprite4.setTexture(tx);
+	sprite4.setTextureRect(IntRect(0, 271, 141, 139));
+	sprite4.setPosition(20, 340);
+	sprite5.setTexture(pr);
+	sprite5.setPosition(0, 0);
+	sprite6.setTextureRect(IntRect(0, 500, 800, 500));
+	sprite6.setTexture(pr);
+	sprite6.setPosition(0, 0);
+}
+
+void readList() {
+	WIN32_FIND_DATAW wfd;
+
+	HANDLE const hFind = FindFirstFileW(L"Maps\\*", &wfd);
+	setlocale(LC_ALL, "");
+	if (INVALID_HANDLE_VALUE != hFind) {
+		do {
+			std::wcout << &wfd.cFileName[0] << std::endl;
+			std::wstring str = &wfd.cFileName[3];
+			printf("%s\n", str.c_str());
+		} while (NULL != FindNextFileW(hFind, &wfd));
+
+		FindClose(hFind);
+	}
+}
+
+void setMap(RectangleShape& choice, Sprite sprite, Clock time, int& menu) {
+	int enterChoice =1;
+	int numMap;
+	while (1) {
+		window.clear(Color::Black);
+		window.draw(sprite);
+		window.draw(choice);
+		window.display();
+		if (Keyboard::isKeyPressed(Keyboard::Enter)  && time.getElapsedTime().asSeconds() > 0.3) { break; }
+		if (Keyboard::isKeyPressed(Keyboard::Escape)) { menu = 0; return; }
+		if (time.getElapsedTime().asSeconds() > 0.3) {
+			if (Keyboard::isKeyPressed(Keyboard::Left)) {
+				enterChoice -= 10;
+				if (enterChoice < 1) { enterChoice += 20; }
+				time.restart();
+			}
+
+			if (Keyboard::isKeyPressed(Keyboard::Up)) {
+				enterChoice--;
+				if ((enterChoice < 1)||(enterChoice < 11 && enterChoice>9)) { enterChoice += 2; }
+				time.restart();
+			}
+
+			if (Keyboard::isKeyPressed(Keyboard::Down)) {
+				enterChoice+=1;
+				if ((enterChoice > 2 && enterChoice < 10)||(enterChoice > 12)) { enterChoice -=2; }
+				time.restart();
+			}
+
+			if (Keyboard::isKeyPressed(Keyboard::Right)) {
+				enterChoice+=10;
+				if (enterChoice > 20) { enterChoice -= 20; }
+				time.restart();
+			}
+
+			eventWindow();
+		}
+		switch (enterChoice) {
+		case 1: {choice.setPosition(0, 75); break; }
+		case 11: {choice.setPosition(753, 75); break; }
+		case 2: {choice.setPosition(0, 282); break; }
+		case 12: {choice.setPosition(753, 282); break; }
+		}
+	}
+	switch (enterChoice) {
+	case 1: readMap("Maps\\Map2.txt"); break;
+	case 11: readMap("Maps\\Map1.txt"); break;
+	case 2: readMap("Maps\\Map1.txt"); break;
+	case 12: readMap("Maps\\Map1.txt"); break;
+	}
 }
 
 int main()
 {
 	Music soundPrev, musicMenu, musicGame;
-	soundPrev.openFromFile("preview.wav");
-	musicMenu.openFromFile("menu.wav");
+	soundPrev.openFromFile("Audio\\preview.wav");
+	musicMenu.openFromFile("Audio\\menu.wav");
 	musicMenu.setVolume(2.5);
-	musicGame.openFromFile("game.wav");
+	musicGame.openFromFile("Audio\\game.wav");
 	musicGame.setVolume(2.5);
 	soundPrev.play();
 	bool isMenu = true;
 	RectangleShape choice(Vector2f(350, 60));
 	choice.setFillColor((sf::Color(255, 0, 0, 250)));
 	choice.setPosition(450, 272);
+	RectangleShape choiceMap(Vector2f(47, 181));
+	choiceMap.setFillColor((sf::Color(255, 0, 0, 250)));
 	Texture t, tx, pr;
 	int menu = -1, enterChoice = 1;
-	t.loadFromFile("Asss.png");
+	t.loadFromFile("Graphics\\Asss.png");
 	PLAYER p(t);
-	tx.loadFromFile("work.png");
-	pr.loadFromFile("1.png");
-	readMap();
-	Sprite sprite[6];
-	sprite[0].setTexture(tx);
-	sprite[0].setTextureRect(IntRect(1, 430, 800, 500));
-	sprite[0].setPosition(-offsetX, -offsetY);
-	sprite[1].setTexture(tx);
-	sprite[1].setTextureRect(IntRect(0, 0, 32, 32));
-	sprite[2].setTexture(tx);
-	sprite[2].setTextureRect(IntRect(590, 0, 280, 430));
-	sprite[2].setPosition(50, 40);
-	sprite[3].setTexture(tx);
-	sprite[3].setTextureRect(IntRect(0, 72, 240, 185));
-	sprite[3].setPosition(450, 150);
-	sprite[4].setTexture(tx);
-	sprite[4].setTextureRect(IntRect(0, 271, 141, 139));
-	sprite[4].setPosition(20, 340);
-	sprite[5].setTexture(pr);
-	sprite[5].setPosition(0, 0);
+	Sprite sprite[7];
+	setSprite(sprite[0], sprite[1], sprite[2], sprite[3], sprite[4], sprite[5], sprite[6], tx, pr);
 	Clock time;
 
 	while (menu != 3)
@@ -412,6 +489,7 @@ int main()
 			musicGame.stop();
 			musicMenu.setLoop(true);
 			if (!musicMenu.getStatus()) { musicMenu.play();}
+			time.restart();
 			printMenu(choice, sprite[2], sprite[3], time, enterChoice);
 			
 			if (Keyboard::isKeyPressed(Keyboard::Enter)) { menu = enterChoice; }
@@ -427,16 +505,19 @@ int main()
 
 		if (menu == 1)
 		{
-			musicMenu.stop();
-			musicGame.setLoop(true);
-			if (!musicGame.getStatus()) { musicGame.play(); }
-			float currentFrame = 0;
-			gamrplay(sprite[0], sprite[1], t);
-			eventWindow();
-			printResult();
-			window.display();
-			returnKeys();
-			while ((!Keyboard::isKeyPressed(Keyboard::Escape))) { menu = 0; }
+			setMap(choiceMap, sprite[6], time, menu);
+			if (menu!=0) {
+				musicMenu.stop();
+				musicGame.setLoop(true);
+				if (!musicGame.getStatus()) { musicGame.play(); }
+				float currentFrame = 0;
+				gamrplay(sprite[0], sprite[1], t);
+				eventWindow();
+				printResult();
+				window.display();
+				returnKeys();
+				while ((!Keyboard::isKeyPressed(Keyboard::Escape))) { menu = 0; }
+			}
 		}
 	}
 	return 0;

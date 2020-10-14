@@ -1,0 +1,30 @@
+0                               000000000000000000
+0                                                0
+0                                                0
+0                                                0
+0               K                                0
+0              BBBBBBBBBBBBB                     0
+0       BBB           bbbbbbb                    0
+0                     bbbbbb                     0
+bBBB                  bbbbbb     b               0
+b                     bbbbbb                     0
+b       b             b                          0
+b                     b              B333b       0
+b                     b          b   b555b       0
+b              bbbbbbbb               555b       0
+bK             b1333133  bbb          555b       0
+bbb33bbb       b2444244  bbb     BBBBb555        0
+b315513b       bBBBBBBB  bbb     D3333555K       0
+b425524b       bbbbbbbb  bbb     d5555555b       0
+bBB55BBb       b3313313  bbb  BBBb5555555D       0
+b315513b       b4424424 Kb       b4555555d K     0
+b425524b       b  BBBBBBBb       bB55B55BbBBb    0
+bBB55BBb       b            BBBBBbb55555555bb    0
+b315513D       D            D113313333113313D    0
+b425524d       d            d224424444224424d    0
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbBBBBBBBBBBBBBBBBBBBBB
+bQbQQbqqbbQQbqqbQQbbqqbQQbqqbbQQbqqbQQbbqqbQQbqqbb
+b b  b  bb  b  b  bb  b  b  bb  b  b  bb  b  b  bb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bqbQQbQQbbqqbQQbqqbbQQbqqbQQbbqqbQQbqqbbQQbqqbQQbb
+b b  b  bb  b  b  bb  b  b  bb  b  b  bb  b  b  bb
