@@ -287,8 +287,7 @@ void printMenu(RectangleShape& choice, Sprite sprite1, Sprite sprite2, Clock& ti
 	window.draw(sprite1);
 	window.draw(sprite2);
 	window.display();
-
-	if (time.getElapsedTime().asSeconds() > 0.3)
+;	if (time.getElapsedTime().asSeconds() > 0.3)
 	{
 		if (Keyboard::isKeyPressed(Keyboard::Up))
 		{
@@ -312,7 +311,7 @@ void printMenu(RectangleShape& choice, Sprite sprite1, Sprite sprite2, Clock& ti
 	}
 }
 	
-void gamrplay(Sprite sprite1, Sprite sprite2, Texture t) {
+void gameplay(Sprite sprite1, Sprite sprite2, Texture t) {
 	PLAYER p(t);
 	Clock clock;
 	SoundBuffer buffer;
@@ -324,6 +323,7 @@ void gamrplay(Sprite sprite1, Sprite sprite2, Texture t) {
 	rectangle.setFillColor((sf::Color(255, 255, 255, 0)));
 	hp = 100;
 	score = 0;
+	int x, y;
 	offsetX = p.rect.left - 224;
 	while (hp > 0 && score < 3)
 	{
@@ -335,10 +335,15 @@ void gamrplay(Sprite sprite1, Sprite sprite2, Texture t) {
 		eventWindow();
 		if (Keyboard::isKeyPressed(Keyboard::Left)) { p.dx = -0.1; }
 		if (Keyboard::isKeyPressed(Keyboard::Right)) { p.dx = 0.1; }
-		if (Keyboard::isKeyPressed(Keyboard::Up)) { if (p.onGround) { 
-			
-			sound.play();
-			p.dy = -0.35; p.onGround = false; } }
+		if (Keyboard::isKeyPressed(Keyboard::Up)) {
+			if (p.onGround) {
+				x = p.rect.left / 32;    y = (p.rect.top / 32) - 1;
+				if ((TileMap[y][x + p.isCheckRight] != 'B') && (TileMap[y][x + p.isCheckRight] != 'b')) {
+					sound.play();
+					p.dy = -0.35; p.onGround = false;
+				}
+			}
+		}
 
 		p.update(time);
 
@@ -393,21 +398,21 @@ void setSprite(Sprite& sprite0, Sprite& sprite1, Sprite& sprite2, Sprite& sprite
 
 void readList() {
 	WIN32_FIND_DATAW wfd;
-
+	//char str[10];
 	HANDLE const hFind = FindFirstFileW(L"Maps\\*", &wfd);
 	setlocale(LC_ALL, "");
 	if (INVALID_HANDLE_VALUE != hFind) {
 		do {
 			std::wcout << &wfd.cFileName[0] << std::endl;
-			std::wstring str = &wfd.cFileName[3];
-			printf("%s\n", str.c_str());
+			//std::wstring str = &wfd.cFileName[3];
+			//printf("%s\n", str.c_str());
 		} while (NULL != FindNextFileW(hFind, &wfd));
 
 		FindClose(hFind);
 	}
 }
 
-void setMap(RectangleShape& choice, Sprite sprite, Clock time, int& menu) {
+void setMap(RectangleShape& choice, Sprite sprite, Clock& time, int& menu) {
 	int enterChoice =1;
 	int numMap;
 	while (1) {
@@ -454,7 +459,7 @@ void setMap(RectangleShape& choice, Sprite sprite, Clock time, int& menu) {
 	switch (enterChoice) {
 	case 1: readMap("Maps\\Map2.txt"); break;
 	case 11: readMap("Maps\\Map1.txt"); break;
-	case 2: readMap("Maps\\Map1.txt"); break;
+	case 2: readMap("Maps\\Map3.txt"); break;
 	case 12: readMap("Maps\\Map1.txt"); break;
 	}
 }
@@ -493,10 +498,9 @@ int main()
 			musicGame.stop();
 			musicMenu.setLoop(true);
 			if (!musicMenu.getStatus()) { musicMenu.play();}
-			time.restart();
 			printMenu(choice, sprite[2], sprite[3], time, enterChoice);
 			
-			if (Keyboard::isKeyPressed(Keyboard::Enter)) { menu = enterChoice; }
+			if (Keyboard::isKeyPressed(Keyboard::Enter)) { menu = enterChoice; time.restart(); }
 			eventWindow();
 		}
 
@@ -515,7 +519,7 @@ int main()
 				musicGame.setLoop(true);
 				if (!musicGame.getStatus()) { musicGame.play(); }
 				float currentFrame = 0;
-				gamrplay(sprite[0], sprite[1], t);
+				gameplay(sprite[0], sprite[1], t);
 				eventWindow();
 				printResult();
 				window.display();
