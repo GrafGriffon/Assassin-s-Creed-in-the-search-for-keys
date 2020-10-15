@@ -9,6 +9,7 @@
 #include "main.h"
 #include <windows.h>
 #include <string.h>
+#include <ctime>
 
 using namespace sf;
 
@@ -460,6 +461,9 @@ void setMap(RectangleShape& choice, Sprite sprite, Clock time, int& menu) {
 
 int main()
 {
+	time_t seconds;
+	seconds = time(NULL);
+	srand(seconds);
 	Music soundPrev, musicMenu, musicGame;
 	soundPrev.openFromFile("Audio\\preview.wav");
 	musicMenu.openFromFile("Audio\\menu.wav");
