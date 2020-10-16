@@ -171,9 +171,17 @@ void printInfo(RenderWindow& window) {
 	window.draw(textHp);
 }
 
-void printMap(RenderWindow& window, Sprite sp1, RectangleShape rectangle, int& noKey, int& keys) {
-	for (int i = 0; i < H; i++) {
-		for (int j = 0; j < W; j++)
+void printMap(RenderWindow& window, Sprite sp1, RectangleShape rectangle, int& noKey, int& keys, PLAYER p) {
+	int startHorisontal = (p.rect.left / 32)-13;
+	int stopHorisontal = startHorisontal + 2 * 13;
+	if (startHorisontal < 0) {startHorisontal = 0;}
+	if (startHorisontal >= W - 2 * 13) { startHorisontal = W - 2 * 13; stopHorisontal = W; }
+	int startVertical = (p.rect.top / 32)-8;
+	if (startVertical < 9) { startVertical = 0;}
+	int stopVeertical = (p.rect.top / 32)+9;
+	if (stopVeertical > H) { stopVeertical = H; };
+	for (int i = startVertical; i < stopVeertical; i++) {
+		for (int j = startHorisontal; j < W; j++)
 		{
 			if (TileMap[i][j] == 'K')
 			{
@@ -312,6 +320,9 @@ void printMenu(RectangleShape& choice, Sprite sprite1, Sprite sprite2, Clock& ti
 }
 	
 void gameplay(Sprite sprite1, Sprite sprite2, Texture t) {
+	if ((int)rand()%2) {
+		sprite1.setTextureRect(IntRect(0, 1500, 800, 500));
+	} else { sprite1.setTextureRect(IntRect(0, 1000, 800, 500)); }
 	PLAYER p(t);
 	Clock clock;
 	SoundBuffer buffer;
@@ -351,8 +362,8 @@ void gameplay(Sprite sprite1, Sprite sprite2, Texture t) {
 		if (p.rect.left > 32 * W - 400) offsetX = p.rect.left - 400 - (p.rect.left - 32 * W + 400);
 		offsetY = p.rect.top - 250;
 		window.clear(Color::Black);
-		window.draw(sprite1);
-		printMap(window, sprite2, rectangle, noKey, keys);
+		window.draw(sprite1);   ///
+		printMap(window, sprite2, rectangle, noKey, keys, p);
 		printInfo(window);
 		window.draw(p.sprite);
 		window.display();
@@ -375,8 +386,8 @@ void readMap(const char name[]) {
 void setSprite(Sprite& sprite0, Sprite& sprite1, Sprite& sprite2, Sprite& sprite3, Sprite& sprite4, Sprite& sprite5, Sprite& sprite6, Texture& tx, Texture& pr) {
 	tx.loadFromFile("Graphics\\work.png");
 	pr.loadFromFile("Graphics\\2.png");
-	sprite0.setTexture(tx);
-	sprite0.setTextureRect(IntRect(1, 430, 800, 500));
+	sprite0.setTexture(pr);
+	sprite0.setTextureRect(IntRect(0, 1000, 800, 500));
 	sprite0.setPosition(-offsetX, -offsetY);
 	sprite1.setTexture(tx);
 	sprite1.setTextureRect(IntRect(0, 0, 32, 32));
@@ -394,22 +405,6 @@ void setSprite(Sprite& sprite0, Sprite& sprite1, Sprite& sprite2, Sprite& sprite
 	sprite6.setTextureRect(IntRect(0, 500, 800, 500));
 	sprite6.setTexture(pr);
 	sprite6.setPosition(0, 0);
-}
-
-void readList() {
-	WIN32_FIND_DATAW wfd;
-	//char str[10];
-	HANDLE const hFind = FindFirstFileW(L"Maps\\*", &wfd);
-	setlocale(LC_ALL, "");
-	if (INVALID_HANDLE_VALUE != hFind) {
-		do {
-			std::wcout << &wfd.cFileName[0] << std::endl;
-			//std::wstring str = &wfd.cFileName[3];
-			//printf("%s\n", str.c_str());
-		} while (NULL != FindNextFileW(hFind, &wfd));
-
-		FindClose(hFind);
-	}
 }
 
 void setMap(RectangleShape& choice, Sprite sprite, Clock& time, int& menu) {
@@ -460,7 +455,7 @@ void setMap(RectangleShape& choice, Sprite sprite, Clock& time, int& menu) {
 	case 1: readMap("Maps\\Map2.txt"); break;
 	case 11: readMap("Maps\\Map1.txt"); break;
 	case 2: readMap("Maps\\Map3.txt"); break;
-	case 12: readMap("Maps\\Map1.txt"); break;
+	case 12: readMap("Maps\\Map4.txt"); break;
 	}
 }
 

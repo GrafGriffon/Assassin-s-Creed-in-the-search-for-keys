@@ -1,27 +1,27 @@
-0                               000000000000000000
+0000000000000000                             00000
 0                                                0
 0                                                0
-0                                bbbbb           0
-0     B    B    K                b               0
-0               B               bb               0
-0                               bb               0
-0 B                            bbbBBBB           0
-0                              bbb               0
-0                 BB        bbbbbb               0
-0   B    B              B        b  K       K    0
-0       B                        b BBB333333b    0
-0      B       B                 b   b555555b    0
-0                                    b555555b    0
-0 B   B                   BBB        b555555b    0
-0                   K            BBBBb555555b    0
-0                   BB           33333555555b    0
-0    B                           45555555555b    0
-0                         BB  BBBB5555555555b    0
-0                                b4555555555b    0
-0BB                              bB55555555Bb    0
-0              BB           BBBBBbb55555555bb    0
-0              bb           D113313333113313D    R
-0    b         bb           d224424444224424d  K r
+0                                                0
+0                       K                        0
+0                       b    b    b    b    b    0
+0K                                               0
+0b                                               0
+0                                              b 0
+0                                             bbb0
+0    bbb     b                      K            0
+0                                                0
+0                           bBBBBBBBBBBBBBBBb    0
+0              b            D113313333113313D K  0
+0                           d224424444224424d    0
+0                           bBBBBBBBBBBBBBBBb    0
+0            b            K D113313333113313D    0
+0                           d224424444224424d    0
+bbb     b                   bBBBBBBBBBBBBBBBb    0
+b                           D113313333113313D    0
+b                           d224424444224424d    0
+bbbb                        bBBBBBBBBBBBBBBBb    0
+bbbb                        D113313333113313D    0
+bbbb                        d224424444224424d    0
 bbbbbbbbbbbbbbbbbbbbbbbbbbbbbBBBBBBBBBBBBBBBBBBBBB
 bQbQQbqqbbQQbqqbQQbbqqbQQbqqbbQQbqqbQQbbqqbQQbqqbb
 b b  b  bb  b  b  bb  b  b  bb  b  b  bb  b  b  bb
