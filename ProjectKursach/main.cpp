@@ -14,7 +14,7 @@
 using namespace sf;
 
 float offsetX = 0, offsetY = 0;
-double hp = 100;
+int hp = 100;
 Font font;
 
 const int H = 30, W = 50;
@@ -23,7 +23,7 @@ int score = 0, positionJump1 = 0, positionJump2 = 0, counter = 0;
 String TileMap[H];
 std::map <char, IntRect> spriteMap = { 
 	{'B', IntRect(1, 0, 32, 32)},
-	{'b', IntRect(1, 32, 32, 32)},
+	{'b', IntRect(384, 0, 32, 32)},
 	{'+', IntRect(97, 32, 32, 32)},
 	{'0', IntRect(347, 120, 32, 32)},
 	{'1', IntRect(65, 0, 32, 32)},
@@ -159,7 +159,12 @@ void printInfo(RenderWindow& window) {
 	text.setStyle(Text::Bold);
 	Text textHp("", font, 35);
 	textHp.setStyle(Text::Bold);
-	textHp.setFillColor(Color::Yellow);
+	if (hp <= 100 && hp > 80) { textHp.setFillColor(sf::Color(255, 255, 0)); }
+	if (hp <= 80 && hp > 60) {textHp.setFillColor(sf::Color(255, 215, 0));}
+	if (hp <= 60 && hp > 45) { textHp.setFillColor(sf::Color(255, 265, 0));}
+	if (hp <= 45 && hp > 30) { textHp.setFillColor(sf::Color(255, 140, 0));}
+	if (hp <= 30 && hp > 15) { textHp.setFillColor(sf::Color(255, 69, 0));}
+	if (hp <= 15) { textHp.setFillColor(sf::Color(255, 0, 0));}
 	std::ostringstream scorePlayer, hpPlayer;
 	scorePlayer << score;
 	hpPlayer << hp;
