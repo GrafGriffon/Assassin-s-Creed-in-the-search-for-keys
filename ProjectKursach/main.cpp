@@ -116,7 +116,6 @@ public:
 				int num = (positionJump2 - positionJump1 + 10) / 32;
 				switch (num)
 				{
-				case -4: {hp -= 13;	break;}
 				case 5: {hp -= 20; break;}
 				case 6: {hp -= 28; break;}
 				default: {
@@ -176,6 +175,22 @@ void printInfo(RenderWindow& window) {
 	window.draw(textHp);
 }
 
+char positionKey(int& keys, int& noKey, char TileMap) {
+	if (keys >= 1) {
+		int vib = (rand() % 2);
+		if (keys == 2 && noKey == 0) { TileMap = '+'; }
+		if (keys == 1 && noKey == 1) { TileMap = '+'; }
+		if (noKey != 2) {
+			if (vib == 0) {
+				TileMap = '+';
+				noKey++;
+			}
+		}
+		keys--;
+	}
+	return TileMap;
+}
+
 void printMap(RenderWindow& window, Sprite sp1, RectangleShape rectangle, int& noKey, int& keys, PLAYER p) {
 	int startHorisontal = (p.rect.left / 32)-13;
 	int stopHorisontal = startHorisontal + 2 * 13;
@@ -190,21 +205,7 @@ void printMap(RenderWindow& window, Sprite sp1, RectangleShape rectangle, int& n
 		{
 			if (TileMap[i][j] == 'K')
 			{
-				if (keys>=1)
-				{
-					int vib = (rand() % 2);
-					if (keys==2 && noKey==0){TileMap[i][j] = '+';}
-					if (keys == 1 && noKey == 1){TileMap[i][j] = '+';}
-					if (noKey!=2)
-					{
-						if (vib==0)
-						{
-						TileMap[i][j] = '+';
-						noKey++;
-						}
-					}
-					keys--;
-				}
+				TileMap[i][j]=positionKey(keys, noKey, TileMap[i][j]);
 			}
 			if (TileMap[i][j] == ' ') { continue; }
 			else { sp1.setTextureRect(spriteMap[TileMap[i][j]]); }
@@ -215,17 +216,6 @@ void printMap(RenderWindow& window, Sprite sp1, RectangleShape rectangle, int& n
 		}
 	}
 }
-
-Sprite setSprite(int rectLeft, int rectTop, int rectWidth, int rectHeight, int x, int y) {
-	Sprite sprite;
-	Texture tx;
-	tx.loadFromFile("work.png");
-	sprite.setTexture(tx);
-	sprite.setTextureRect(IntRect(rectLeft, rectTop, rectWidth, rectHeight));
-	sprite.setPosition(x, y);
-	return sprite;
-}
-
 
 RenderWindow window(VideoMode(800, 500), "Assassin's Creed: in the search for keys");
 
@@ -331,7 +321,7 @@ void gameplay(Sprite sprite1, Sprite sprite2, Texture t) {
 	PLAYER p(t);
 	Clock clock;
 	SoundBuffer buffer;
-	buffer.loadFromFile("Audio\\jump.wav");// тут загружаем в буфер что то
+	buffer.loadFromFile("Audio\\jump.wav");
 	Sound sound;
 	sound.setBuffer(buffer);
 	int noKey = 0, keys = 5;
