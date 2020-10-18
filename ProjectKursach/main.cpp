@@ -191,7 +191,7 @@ char positionKey(int& keys, int& noKey, char TileMap) {
 	return TileMap;
 }
 
-void printMap(RenderWindow& window, Sprite sp1, RectangleShape rectangle, int& noKey, int& keys, PLAYER p) {
+void printMap(RenderWindow& window, Sprite sp1, int& noKey, int& keys, PLAYER p) {
 	int startHorisontal = (p.rect.left / 32)-13;
 	int stopHorisontal = startHorisontal + 2 * 13;
 	if (startHorisontal < 0) {startHorisontal = 0;}
@@ -209,9 +209,7 @@ void printMap(RenderWindow& window, Sprite sp1, RectangleShape rectangle, int& n
 			}
 			if (TileMap[i][j] == ' ') { continue; }
 			else { sp1.setTextureRect(spriteMap[TileMap[i][j]]); }
-			rectangle.setPosition(j * 32 - offsetX, i * 32 - offsetY);
 			sp1.setPosition(j * 32 - offsetX, i * 32 - offsetY);
-			window.draw(rectangle);
 			window.draw(sp1);
 		}
 	}
@@ -325,8 +323,6 @@ void gameplay(Sprite sprite1, Sprite sprite2, Texture t) {
 	Sound sound;
 	sound.setBuffer(buffer);
 	int noKey = 0, keys = 5;
-	RectangleShape rectangle(Vector2f(32, 32));
-	rectangle.setFillColor((sf::Color(255, 255, 255, 0)));
 	hp = 100;
 	score = 0;
 	int x, y;
@@ -358,7 +354,7 @@ void gameplay(Sprite sprite1, Sprite sprite2, Texture t) {
 		offsetY = p.rect.top - 250;
 		window.clear(Color::Black);
 		window.draw(sprite1);   ///
-		printMap(window, sprite2, rectangle, noKey, keys, p);
+		printMap(window, sprite2, noKey, keys, p);
 		printInfo(window);
 		window.draw(p.sprite);
 		window.display();
