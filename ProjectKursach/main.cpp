@@ -178,7 +178,6 @@ char positionKey(int& keys, int& noKey, char TileMap) {
 				noKey++;
 			}
 		}
-		printf("%c\n", TileMap);
 		keys--;
 	}
 	return TileMap;
@@ -241,17 +240,6 @@ void printResult() {
 	}
 	text.setPosition(220, 150);
 	window.draw(text);
-}
-
-void returnKeys() {
-	for (int i = 0; i < H; i++) {
-		for (int j = 0; j < W; j++) {
-			if (TileMap[i][j] != '+') {
-				continue;
-			}
-			else { TileMap[i][j] = 'K'; }
-		}
-	}
 }
 
 int printPrewiev(Sprite sprite, int menu, bool checkMusic) {
@@ -489,7 +477,6 @@ int main() {
 				eventWindow();
 				printResult();
 				window.display();
-				returnKeys();
 				while ((!Keyboard::isKeyPressed(Keyboard::Escape))) { menu = 0; }
 			}
 		}
