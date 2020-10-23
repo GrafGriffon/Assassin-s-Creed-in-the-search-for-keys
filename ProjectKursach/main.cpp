@@ -293,13 +293,13 @@ void gameplay(Sprite sprite1, Sprite sprite2, Texture t, int& menu) {
 	score = 0;
 	int x, y;
 	offsetX = p.rect.left - 224;
-	while (hp > 0 && score < 3) {
+	while (hp > 0 && score < 3 && menu !=3) {
+		eventWindow(menu);
 		float time = clock.getElapsedTime().asMicroseconds();
 		clock.restart();
 
 		time = time / 600;
 
-		eventWindow(menu);
 		if (Keyboard::isKeyPressed(Keyboard::Left)) { p.dx = -0.1; }
 		if (Keyboard::isKeyPressed(Keyboard::Right)) { p.dx = 0.1; }
 		if (Keyboard::isKeyPressed(Keyboard::Up)) {
@@ -372,7 +372,7 @@ void setSprite(Sprite& sprite0, Sprite& sprite1, Sprite& sprite2, Sprite& sprite
 void setMap(RectangleShape& choice, Sprite sprite, Clock& time, int& menu) {
 	int enterChoice = 1;
 	int numMap;
-	while (1) {
+	while (menu!=3) {
 		window.clear(Color::Black);
 		window.draw(sprite);
 		window.draw(choice);
@@ -403,7 +403,6 @@ void setMap(RectangleShape& choice, Sprite sprite, Clock& time, int& menu) {
 				if (enterChoice > 20) { enterChoice -= 20; }
 				time.restart();
 			}
-
 			eventWindow(menu);
 		}
 		switch (enterChoice) {
@@ -447,6 +446,7 @@ int main() {
 	Clock time;
 
 	while (menu != 3) {
+		eventWindow(menu);
 		if (menu == -1) { menu = printPrewiev(sprite[5], menu, soundPrev.getStatus()); }
 		if (menu == 0) {
 			musicGame.stop();
@@ -455,27 +455,24 @@ int main() {
 			printMenu(choice, sprite[2], sprite[3], time, enterChoice);
 
 			if (Keyboard::isKeyPressed(Keyboard::Enter)) { menu = enterChoice; time.restart(); }
-			eventWindow(menu);
 		}
 
 		if (menu == 2) {
 			viewInfo(sprite[4]);
 			if ((Keyboard::isKeyPressed(Keyboard::Escape))) { menu = 0; }
-			eventWindow(menu);
 		}
 
 		if (menu == 1) {
 			setMap(choiceMap, sprite[6], time, menu);
-			if (menu != 0) {
+			if (menu != 0 && menu != 3) {
 				musicMenu.stop();
 				musicGame.setLoop(true);
 				if (!musicGame.getStatus()) { musicGame.play(); }
 				float currentFrame = 0;
 				gameplay(sprite[0], sprite[1], t, menu);
-				eventWindow(menu);
 				printResult();
 				window.display();
-				while ((!Keyboard::isKeyPressed(Keyboard::Escape))) { menu = 0; }
+				while ((!Keyboard::isKeyPressed(Keyboard::Escape) && menu!=3)) { menu = 0; }
 			}
 		}
 	}
