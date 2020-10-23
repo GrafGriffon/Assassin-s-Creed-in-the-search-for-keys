@@ -167,19 +167,15 @@ void printInfo(RenderWindow& window) {
 	window.draw(textHp);
 }
 
-char positionKey(int& keys, int& noKey, char TileMap) {
-	if (keys >= 1) {
-		int vib = (rand() % 2);
-		if (keys == 2 && noKey == 0) { TileMap = '+'; }
-		if (keys == 1 && noKey == 1) { TileMap = '+'; }
-		if (noKey != 2) {
-			if (vib == 0) {
-				TileMap = '+';
-				noKey++;
-			}
+char positionKey(int& keys, int& noKey, char TileMap, int vib) {
+	if ((keys == 2 && noKey == 0) || (keys == 1 && noKey == 1)) { TileMap = '+'; }
+	else {
+		if (noKey != 2 && vib == 0) {
+			TileMap = '+';
+			noKey++;
 		}
-		keys--;
 	}
+	keys--;
 	return TileMap;
 }
 
@@ -207,7 +203,7 @@ RenderWindow window(VideoMode(800, 500), "Assassin's Creed: in the search for ke
 void viewInfo(Sprite sprite) {
 	Font font;
 	font.loadFromFile("Fonts\\2.ttf");
-	Text text("\n  Целью данного игрового средства является сбор всех \nключей на игровом поле. Управление осущенствляется \nпо сдедствам стрелок. Игровой процесс продолжается,\nпока не кончатся очки hp, или не будет выполнена цель.\nЭто ПО разработано судентом группы 951006 БГУИР  \nКурбацкий Ильёй Дмитриевичем в 2020 году.\n\n\n\n\n                    - ссылка для обратной связи", font, 30);
+	Text text("\n  Целью данного игрового средства является сбор всех \nключей на игровом поле. Управление осуществляется \nпо сдедствам стрелок. Игровой процесс продолжается,\nпока не кончатся очки hp, или не будет выполнена цель.\nЭто ПО разработано судентом группы 951006 БГУИР  \nКурбацким Ильёй Дмитриевичем в 2020 году.\n\n\n\n\n                    - ссылка для обратной связи", font, 30);
 	text.setStyle(Text::Bold);
 	text.setPosition(20, 90);
 	window.clear(Color::Black);
@@ -219,8 +215,9 @@ void viewInfo(Sprite sprite) {
 void eventWindow() {
 	Event event;
 	while (window.pollEvent(event)) {
-		if (event.type == Event::Closed)
+		if (event.type == Event::Closed) {
 			window.close();
+		}
 	}
 }
 
@@ -260,7 +257,7 @@ void printMenu(RectangleShape& choice, Sprite sprite1, Sprite sprite2, Clock& ti
 	window.draw(sprite1);
 	window.draw(sprite2);
 	window.display();
-	;	if (time.getElapsedTime().asSeconds() > 0.3) {
+	if (time.getElapsedTime().asSeconds() > 0.3) {
 		if (Keyboard::isKeyPressed(Keyboard::Up)) {
 			enterChoice--;
 			if (enterChoice < 1) { enterChoice = 3; }
@@ -339,7 +336,7 @@ void readMap(const char name[]) {
 		TileMap[num] = s;
 		for (int i = 0; i < W; i++) {
 			if (TileMap[num][i] == 'K') {
-				TileMap[num][i] = positionKey(keys, noKey, TileMap[num][i]);
+				TileMap[num][i] = positionKey(keys, noKey, TileMap[num][i], (rand() % 2));
 			}
 		}
 		num++;
