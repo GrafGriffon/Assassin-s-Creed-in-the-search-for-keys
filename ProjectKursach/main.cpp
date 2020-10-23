@@ -212,10 +212,11 @@ void viewInfo(Sprite sprite) {
 	window.display();
 }
 
-void eventWindow() {
+void eventWindow(int& menu) {
 	Event event;
 	while (window.pollEvent(event)) {
 		if (event.type == Event::Closed) {
+			menu = 3;
 			window.close();
 		}
 	}
@@ -247,7 +248,7 @@ int printPrewiev(Sprite sprite, int menu, bool checkMusic) {
 		if (IntRect(0, 0, 1920, 1080).contains(Mouse::getPosition(window))) { menu = 0; }
 		if (!Mouse::isButtonPressed(Mouse::Left)) { menu = -1; }
 	}
-	eventWindow();
+	eventWindow(menu);
 	return menu;
 }
 
@@ -277,7 +278,7 @@ void printMenu(RectangleShape& choice, Sprite sprite1, Sprite sprite2, Clock& ti
 	}
 }
 
-void gameplay(Sprite sprite1, Sprite sprite2, Texture t) {
+void gameplay(Sprite sprite1, Sprite sprite2, Texture t, int& menu) {
 	if ((int)rand() % 2) {
 		sprite1.setTextureRect(IntRect(0, 1500, 800, 500));
 	}
@@ -298,7 +299,7 @@ void gameplay(Sprite sprite1, Sprite sprite2, Texture t) {
 
 		time = time / 600;
 
-		eventWindow();
+		eventWindow(menu);
 		if (Keyboard::isKeyPressed(Keyboard::Left)) { p.dx = -0.1; }
 		if (Keyboard::isKeyPressed(Keyboard::Right)) { p.dx = 0.1; }
 		if (Keyboard::isKeyPressed(Keyboard::Up)) {
@@ -403,7 +404,7 @@ void setMap(RectangleShape& choice, Sprite sprite, Clock& time, int& menu) {
 				time.restart();
 			}
 
-			eventWindow();
+			eventWindow(menu);
 		}
 		switch (enterChoice) {
 		case 1: {choice.setPosition(0, 75); break; }
@@ -454,13 +455,13 @@ int main() {
 			printMenu(choice, sprite[2], sprite[3], time, enterChoice);
 
 			if (Keyboard::isKeyPressed(Keyboard::Enter)) { menu = enterChoice; time.restart(); }
-			eventWindow();
+			eventWindow(menu);
 		}
 
 		if (menu == 2) {
 			viewInfo(sprite[4]);
 			if ((Keyboard::isKeyPressed(Keyboard::Escape))) { menu = 0; }
-			eventWindow();
+			eventWindow(menu);
 		}
 
 		if (menu == 1) {
@@ -470,13 +471,16 @@ int main() {
 				musicGame.setLoop(true);
 				if (!musicGame.getStatus()) { musicGame.play(); }
 				float currentFrame = 0;
-				gameplay(sprite[0], sprite[1], t);
-				eventWindow();
+				gameplay(sprite[0], sprite[1], t, menu);
+				eventWindow(menu);
 				printResult();
 				window.display();
 				while ((!Keyboard::isKeyPressed(Keyboard::Escape))) { menu = 0; }
 			}
 		}
 	}
+	musicGame.stop();
+	musicMenu.stop();
+	soundPrev.stop();
 	return 0;
 }
