@@ -57,7 +57,7 @@ public:
 	}
 
 	void update(float time) {
-		if (time > 90) { time = 90; }
+		if (time > 80) { time = 80; }
 		rect.left += dx * time;
 		Collision(0);
 		if (!onGround) dy = dy + 0.0005 * time;
@@ -74,8 +74,7 @@ public:
 			if (isCheckRight) { sprite.setTextureRect(IntRect(39 * int(currentFrame), 1, 32, 60)); }
 			else { sprite.setTextureRect(IntRect(39 * int(currentFrame) + 32, 1, -32, 60)); }
 		}
-		if (isCheckRight) { jump(1); }
-		else { jump(0); }
+		jump(isCheckRight);
 		if (Keyboard::isKeyPressed(Keyboard::Left)) { isCheckRight = false; }
 		if (Keyboard::isKeyPressed(Keyboard::Right)) { isCheckRight = true; }
 		sprite.setPosition(rect.left - offsetX, rect.top - offsetY);
@@ -304,7 +303,9 @@ void gameplay(Sprite sprite1, Sprite sprite2, Texture t, int& menu) {
 		if (Keyboard::isKeyPressed(Keyboard::Right)) { p.dx = 0.1; }
 		if (Keyboard::isKeyPressed(Keyboard::Up)) {
 			if (p.onGround) {
-				x = p.rect.left / 32;    y = (p.rect.top / 32) - 1;
+				x = p.rect.left / 32-p.isCheckRight;    
+				y = (p.rect.top / 32) - 1;
+				if (p.isCheckRight && (TileMap[y][x + 2] != 'B') && (TileMap[y][x + 2] != 'b')) {x += p.isCheckRight;}
 				if ((TileMap[y][x + p.isCheckRight] != 'B') && (TileMap[y][x + p.isCheckRight] != 'b')) {
 					sound.play();
 					p.dy = -0.35; p.onGround = false;
@@ -318,7 +319,7 @@ void gameplay(Sprite sprite1, Sprite sprite2, Texture t, int& menu) {
 		if (p.rect.left > 32 * W - 400) offsetX = p.rect.left - 400 - (p.rect.left - 32 * W + 400);
 		offsetY = p.rect.top - 250;
 		window.clear(Color::Black);
-		window.draw(sprite1);   ///
+		window.draw(sprite1);
 		printMap(window, sprite2, p);
 		printInfo(window);
 		window.draw(p.sprite);
@@ -453,7 +454,6 @@ int main() {
 			musicMenu.setLoop(true);
 			if (!musicMenu.getStatus()) { musicMenu.play(); }
 			printMenu(choice, sprite[2], sprite[3], time, enterChoice);
-
 			if (Keyboard::isKeyPressed(Keyboard::Enter)) { menu = enterChoice; time.restart(); }
 		}
 
@@ -470,9 +470,11 @@ int main() {
 				if (!musicGame.getStatus()) { musicGame.play(); }
 				float currentFrame = 0;
 				gameplay(sprite[0], sprite[1], t, menu);
-				printResult();
-				window.display();
-				while ((!Keyboard::isKeyPressed(Keyboard::Escape) && menu!=3)) { menu = 0; }
+				while (!Keyboard::isKeyPressed(Keyboard::Escape)&&menu!=3) {
+					eventWindow(menu);
+					printResult();
+					window.display();
+				}
 			}
 		}
 	}
